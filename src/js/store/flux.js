@@ -4,6 +4,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 			characters: [],
 			locations: [],
 			episodes: [],
+
+			favouritesList: [],
+			hoveredIndex: null,
+
 		},
 		actions: {
 			getAllCharacters: async () => {
@@ -22,6 +26,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const response = await fetch ("https://rickandmortyapi.com/api/episode");
 				const data = await response.json();
 				setStore({episodes: data.results});
+			},
+
+			addFavourite: () => {
+
+			},
+
+			deleteFavourite: () => {
+
+			},
+
+			setHoveredIndex: (index) => {
+				
 			},
 		}
 	};
