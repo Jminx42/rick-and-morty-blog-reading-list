@@ -6,7 +6,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			episodes: [],
 
 			favouritesList: [],
-			hoveredIndex: null,
+			
+			singleCharacter: [],
 
 		},
 		actions: {
@@ -28,17 +29,24 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({episodes: data.results});
 			},
 
-			addFavourite: () => {
+			addFavourite: (name) => {
+				const store = getStore();
+				const newFavList = [...store.favouritesList, name];
+				console.log(newFavList);
+				setStore({favouritesList: newFavList});
 
 			},
 
-			deleteFavourite: () => {
-
+			deleteFavourite: (name) => {
+				const store = getStore();
+				const newFavList = store.favouritesList.filter((fav) => fav !== name);
+				setStore({favouritesList: newFavList});
 			},
 
-			setHoveredIndex: (index) => {
-				
+			setSingleCharacter: (singleChar) => {
+				setStore({singleCharacter: singleChar})
 			},
+			
 		}
 	};
 };

@@ -4,6 +4,11 @@ import { Context } from "../store/appContext.js";
 
 export const Navbar = () => {
 	const {store, actions} = useContext(Context);
+
+	const handleTrashClick = (favourite) => {
+		actions.deleteFavourite(favourite);
+	}
+
 	return (
 		<nav className="navbar navbar-light bg-light mb-3 px-5">
 			<Link to="/">
@@ -13,7 +18,7 @@ export const Navbar = () => {
 			<div className="ms-auto pe-5">
 			<div className="dropdown">
 				<button className="btn btn-primary dropdown-toggle p-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-					Favourites <span className="badge bg-secondary">0</span>
+					Favourites <span className="badge bg-secondary">{store.favouritesList.length}</span>
 				</button>
 				<ul className="dropdown-menu">
 					{ store.favouritesList.length === 0 ? 
@@ -24,9 +29,9 @@ export const Navbar = () => {
 					:
 						store.favouritesList.map((favourite) => {
 							return (
-								<li><a className="dropdown-item">
+								<li key={favourite}><a className="dropdown-item">
 									{favourite}
-									<span className="mx-auto"><i className="fa-regular fa-trash-can"></i></span>
+									<span className="mx-auto"><i className="btn fa-regular fa-trash-can" onClick={() => handleTrashClick(favourite)}></i></span>
 									</a>
 								</li>
 							)
