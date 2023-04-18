@@ -1,66 +1,60 @@
-import React, { useState, useEffect, useContext } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Context } from "../store/appContext";
 
-export const Single = props => {
-	const { store, actions } = useContext(Context);
-	const { id } = useParams();
+export const Single = () => {
+  const params = useParams();
+  const [item, setItem] = useState({});
 
-	return (
-		<div className="container">
-			<div className="row text-center">
-				<div className="col-6">
-					<img src={store.singleCharacter.image} />
-				</div>
-				<div className="col-6">
-					<h2 className="">{store.singleCharacter.name}</h2>
-					<p className=""></p>
-				</div>
-			</div>
-			<div className="row">
-				<div className="col-12 text-danger">
-					<hr></hr>
-					<table className="table text-danger">
-					<thead>
-						<tr>
-						<th scope="col"></th>
-						<th scope="col">Name</th>
-						<th scope="col">Status</th>
-						<th scope="col">Species</th>
-						<th scope="col">Gender</th>
-						<th scope="col">Origin</th>
-						<th scope="col">Location</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-						<th scope="row"></th>
-						<td>{store.singleCharacter.name}</td>
-						<td>{store.singleCharacter.status}</td>
-						<td>{store.singleCharacter.species}</td>
-						<td>{store.singleCharacter.gender}</td>
-						<td>{store.singleCharacter.origin.name}</td>
-						<td>{store.singleCharacter.location.name}</td>
-						</tr>
-						
-					</tbody>
-					</table>
-					
-				</div>
-			</div>
+  const getSingleElement = async () => {
+    const response = await fetch(
+      `https://rickandmortyapi.com/api/${params.thetype}/${params.theid}`
+    );
+    const data = await response.json();
+    setItem(data);
+  };
 
-			
+  useEffect(() => {
+    getSingleElement();
+  }, []);
 
-			<Link to="/">
-				<span className="btn btn-primary btn-lg" href="#" role="button">
-					Back home
-				</span>
-			</Link>
-		</div>
-	);
-};
+  return (
+    <div className="container">
+      <div className="row">
+        <h2 className="text-center display-3 p-3">{item.name}</h2>
+        <div className="col-6 text-center ">
+          <img src={item.image} />
+        </div>
+        <div className="col-1">
+          {Object.keys(item).map((itemKey, index) => {
+            if (
+              typeof item[itemKey] !== "object" &&
+              itemKey !== "created" &&
+              itemKey !== "type"
+            ) {
+              return <p key={index}> {itemKey.toUpperCase()}:</p>;
+            }
+          })}
+        </div>
+        <div className="col-3">
+          {Object.keys(item).map((itemKey, index) => {
+            if (
+              typeof item[itemKey] !== "object" &&
+              itemKey !== "created" &&
+              itemKey !== "type"
+            ) {
+              return <p key={index}>{item[itemKey]}</p>;
+            }
+          })}
+        </div>
+      </div>
 
-Single.propTypes = {
-	match: PropTypes.object
+      <Link to="/">
+        <div className="col-2 ms-auto">
+          <button className="btn btn-primary btn-lg m-3" href="#" role="button">
+            Back home
+          </button>
+        </div>
+      </Link>
+    </div>
+  );
 };

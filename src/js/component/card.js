@@ -1,39 +1,61 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import { Context } from "../store/appContext";
 
-
-const Card = ({ name, image, status, species, gender, type, dimension, airDate, episode, handleLearnBtn, handleFavBtn }) => {
-  const [isButtonClicked, setIsButtonClicked] = useState(false);
-
+const Card = ({ item }) => {
+  const { store, actions } = useContext(Context);
   return (
-        <div className="card m-2 g-0" style={{width: "18rem"}}>
-          <img src={image} className="card-img-top" alt="..."/>
-          <div className="card-body">
-              <h5 className="card-title">{name}</h5>
-              <p className="card-text">
-                {status ? <span>{status}<br/></span> : null} 
-                {species ? <span>{species}<br/></span> : null} 
-                {gender ? <span>{gender}<br/></span> : null} 
-                {type ? <span>{type}<br/></span> : null}
-                {dimension ? <span>{dimension}<br/></span> : null}
-                {airDate ? <span>{airDate}<br/></span> : null}
-                {episode ? <span>{episode}<br/></span> : null}
-              </p>
-              <div className="d-flex justify-content-between align-items-end">
-                <button type="button" className="btn btn-outline-primary" 
-                onClick={() => {handleLearnBtn(); setIsButtonClicked(true)}}>Learn more!</button>
-                <button type="button" className="btn btn-outline-warning" 
-                onClick={() => {handleFavBtn(); setIsButtonClicked(true)}}>
-                  {
-                    isButtonClicked ?
-                    <i className="fa-solid fa-heart"></i>
-                    :
-                    <i className="fa-regular fa-heart"></i>}
-                </button>
-              </div>
-              
-          </div>
-        </div> 
-  )
-}
+    <div className="card m-2 g-0" style={{ width: "18rem" }}>
+      <img
+        src={item.image ? item.image : "https://placehold.jp/400x200.png"}
+        className="card-img-top"
+        alt="..."
+      />
+      <div className="card-body">
+        <h5 className="card-title">{item.name}</h5>
+        {item.gender ? (
+          <>
+            <p>Status: {item.status}</p>
+            <p>Species: {item.species}</p>
+            <p>Gender: {item.gender}</p>
+          </>
+        ) : item.air_date ? (
+          <>
+            <p>Air date: {item.air_date}</p>
+            <p>Episode: {item.episode}</p>
+          </>
+        ) : (
+          <>
+            <p>Type: {item.type}</p>
+            <p>Dimension: {item.dimension}</p>
+          </>
+        )}
+        <div className="d-flex justify-content-between align-items-end">
+          <Link
+            to={`/single/${item.id}/${
+              item.gender ? "character" : item.air_date ? "episode" : "location"
+            }`}
+          >
+            <button type="button" className="btn btn-outline-primary">
+              Learn more!
+            </button>
+          </Link>
+
+          <button
+            type="button"
+            className="btn btn-outline-warning"
+            onClick={() => actions.setFavourite(item.name)}
+          >
+            {store.favouritesList.includes(item.name) ? (
+              <i className="fa-solid fa-heart"></i>
+            ) : (
+              <i className="fa-regular fa-heart"></i>
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default Card;

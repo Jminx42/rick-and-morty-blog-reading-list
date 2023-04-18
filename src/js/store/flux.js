@@ -1,54 +1,47 @@
 const getState = ({ getStore, getActions, setStore }) => {
-	return {
-		store: {
-			characters: [],
-			locations: [],
-			episodes: [],
+  return {
+    store: {
+      characters: [],
+      locations: [],
+      episodes: [],
 
-			favouritesList: [],
-			
-			singleCharacter: [],
+      favouritesList: [],
 
-		},
-		actions: {
-			getAllCharacters: async () => {
-				const response = await fetch ("https://rickandmortyapi.com/api/character");
-				const data = await response.json();
-				setStore({characters: data.results});
-			},
-			
-			getAllLocations: async () => {
-				const response = await fetch ("https://rickandmortyapi.com/api/location");
-				const data = await response.json();
-				setStore({locations: data.results});
-			},
+      singleCharacter: [],
+    },
+    actions: {
+      getAllCharacters: async () => {
+        const response = await fetch(
+          "https://rickandmortyapi.com/api/character"
+        );
+        const data = await response.json();
+        setStore({ characters: data.results });
+      },
 
-			getAllEpisodes: async () => {
-				const response = await fetch ("https://rickandmortyapi.com/api/episode");
-				const data = await response.json();
-				setStore({episodes: data.results});
-			},
+      getAllLocations: async () => {
+        const response = await fetch(
+          "https://rickandmortyapi.com/api/location"
+        );
+        const data = await response.json();
+        setStore({ locations: data.results });
+      },
 
-			addFavourite: (name) => {
-				const store = getStore();
-				const newFavList = [...store.favouritesList, name];
-				console.log(newFavList);
-				setStore({favouritesList: newFavList});
+      getAllEpisodes: async () => {
+        const response = await fetch("https://rickandmortyapi.com/api/episode");
+        const data = await response.json();
+        setStore({ episodes: data.results });
+      },
 
-			},
-
-			deleteFavourite: (name) => {
-				const store = getStore();
-				const newFavList = store.favouritesList.filter((fav) => fav !== name);
-				setStore({favouritesList: newFavList});
-			},
-
-			setSingleCharacter: (singleChar) => {
-				setStore({singleCharacter: singleChar})
-			},
-			
-		}
-	};
+      setFavourite: (name) => {
+        const favs = getStore().favouritesList;
+        if (!favs.includes(name)) {
+          setStore({ favouritesList: [...favs, name] });
+        } else {
+          setStore({ favouritesList: favs.filter((fav) => fav !== name) });
+        }
+      },
+    },
+  };
 };
 
 export default getState;
