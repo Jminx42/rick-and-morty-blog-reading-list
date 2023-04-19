@@ -1,62 +1,35 @@
-import React, { useContext} from "react";
-
-import "../../styles/home.css";
+import React, { useContext, useState } from "react";
 import Card from "../component/card.js";
 import { Context } from "../store/appContext.js";
 
 export const Home = () => {
-	const {store, actions} = useContext(Context);
-	
-	return (
-	<div className="text-start mt-5">
-		<div className="container characters">
-			<div className="row">
-				<h2>Characters</h2>
-			</div>
-		
-			<div className="row flex-nowrap overflow-scroll">
-				{
-					store.characters.map((character) => {
-						return <Card key={character.id} name={character.name} image={character.image}/>
-					})
-				}
-			</div>
+  const { store, actions } = useContext(Context);
 
-		</div>
-		<div className="container locations">
-			<div className="row">
-				<h2>Locations</h2>
-			</div>
-		
-			<div className="row flex-nowrap overflow-scroll">
-				{
-					store.locations.map((location) => {
-						return <Card key={location.id} name={location.name} />
-					})
-				}
-			</div>
+  return (
+    <div className="container mt-5">
+      <h2 className="p-3 text-center">Characters</h2>
 
-		</div>
-		<div className="container episodes">
-			<div className="row">
-				<h2>Episodes</h2>
-			</div>
-		
-			<div className="row flex-nowrap overflow-scroll">
-				{
-					store.episodes.map((episode) => {
-						return <Card key={episode.id} name={episode.name} />
-					})
-				}
-			</div>
+      <div className="row flex-nowrap overflow-scroll">
+        {store.characters.map((character) => {
+          return <Card key={character.id} item={character} />;
+        })}
+      </div>
 
-		</div>
-		
+      <h2 className="p-3 text-center">Locations</h2>
 
-		
-		
-		
-		
-	</div>
-)
-}
+      <div className="row flex-nowrap overflow-scroll">
+        {store.locations.map((location) => {
+          return <Card key={location.id} item={location} />;
+        })}
+      </div>
+
+      <h2 className="p-3 text-center">Episodes</h2>
+
+      <div className="row flex-nowrap overflow-scroll">
+        {store.episodes.map((episode) => {
+          return <Card key={episode.id} item={episode} />;
+        })}
+      </div>
+    </div>
+  );
+};
